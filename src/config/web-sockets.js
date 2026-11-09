@@ -1,10 +1,9 @@
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 
-let STRAPI_ENDPOINT;
-if (process.env.NODE_ENV !== 'production') {
-    STRAPI_ENDPOINT = 'http://localhost:1337';
-} else {
-    STRAPI_ENDPOINT = process.env.REACT_APP_SERVER_URL
-}
+// Strapi + Socket.IO server. Set REACT_APP_SERVER_URL for deployed builds.
+export const SERVER_URL = (process.env.REACT_APP_SERVER_URL || 'http://localhost:1337').replace(/\/$/, '');
 
-export const socket = io(STRAPI_ENDPOINT);
+export const socket = io(SERVER_URL, {
+    transports: ['websocket', 'polling'],
+    reconnectionDelayMax: 10000,
+});

@@ -1,31 +1,36 @@
 import React from 'react';
-import ScrollToBottom from 'react-scroll-to-bottom'
-import Message from './Message/';
+import ScrollToBottom from 'react-scroll-to-bottom';
 import styled from 'styled-components';
+import Message from './Message';
 
-function Messages(props) {
-    const { messages, username } = props;
+function Messages({ messages, username }) {
     return (
-        <StyledMessages>
-            <ScrollToBottom>
-                {
-                    messages.map((message, i) => 
-                        <div key={i}>
-                            <Message 
-                                message={message} 
-                                username={username}
-                            />
-                        </div>
-                    )
-                }
+        <StyledMessages role="log" aria-live="polite" aria-label="Messages">
+            <ScrollToBottom className="scroller" followButtonClassName="follow">
+                <div className="inner">
+                    {messages.map((message, i) => (
+                        // Messages have no id; the index is stable because the list only grows.
+                        // eslint-disable-next-line react/no-array-index-key
+                        <Message key={i} message={message} username={username} />
+                    ))}
+                </div>
             </ScrollToBottom>
         </StyledMessages>
     );
 }
+
 export default Messages;
 
 const StyledMessages = styled.div`
-    padding: 5% 0;
-    overflow: auto;
-    flex: auto;
-`
+    flex: 1;
+    min-height: 0;
+    background: #fbfcff;
+
+    .scroller {
+        height: 100%;
+    }
+
+    .inner {
+        padding: 20px 20px 8px;
+    }
+`;

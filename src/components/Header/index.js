@@ -1,54 +1,59 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Button, Tooltip } from 'antd';
+import { LogoutOutlined } from '@ant-design/icons';
+import { colors } from '../../theme';
 
-function Header(props) {
-    return(
+function Header({ room, count, connected, onLeave }) {
+    return (
         <StyledHeader>
-            <OnlineStatusContainer>
-                <OnlineIcon>
-                    <i className="fa fa-circle" aria-hidden="true"></i>
-                </OnlineIcon>
-                <div>{props.room}</div>
-            </OnlineStatusContainer>
-            <CloseIconContainer>
-                <a href="/">
-                    <CloseIcon> 
-                        <i className="fa fa-times-circle" aria-hidden="true"></i>
-                    </CloseIcon>
-                </a>
-            </CloseIconContainer>
+            <div>
+                <RoomName>#{room}</RoomName>
+                <Meta>
+                    <Dot $online={connected} aria-hidden="true" />
+                    {connected ? `${count} online` : 'Reconnecting…'}
+                </Meta>
+            </div>
+            <Tooltip title="Leave room">
+                <Button icon={<LogoutOutlined />} onClick={onLeave}>
+                    Leave
+                </Button>
+            </Tooltip>
         </StyledHeader>
-    )
+    );
 }
 
 export default Header;
 
-const StyledHeader = styled.div`
+const StyledHeader = styled.header`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #2979FF;
-    border-radius: 4px 4px 0 0;
-    height: 60px;
-    width: 100%;
-`
-const OnlineStatusContainer = styled.div`
-    flex: 0.5;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid ${colors.border};
+    background: ${colors.surface};
+`;
+
+const RoomName = styled.h1`
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: ${colors.text};
+    word-break: break-all;
+`;
+
+const Meta = styled.div`
     display: flex;
     align-items: center;
-    margin-left: 5%;
-    color: white;
+    gap: 6px;
+    color: ${colors.muted};
+    font-size: 13px;
 `;
-const CloseIconContainer = styled.div`
-    margin-right: 5%;
-`
 
-const OnlineIcon = styled.div`
-    color: #11ec11;
-    margin-right: 10px
-`; 
-
-const CloseIcon = styled.div`
-    font-size: 20px;
-    color: #fff;
+const Dot = styled.span`
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: ${(p) => (p.$online ? colors.online : '#9ca3af')};
 `;

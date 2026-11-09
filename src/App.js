@@ -1,52 +1,38 @@
-import React, { useState } from 'react';
-import {
-    Route,
-    Switch,
-    Redirect
-} from "react-router-dom";
+import React, { useCallback, useState } from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 import JoinRoom from './screens/JoinRoom';
 import ChatRoom from './screens/ChatRoom';
-
-
 import { history } from './config/network';
-
+import { socket } from './config/web-sockets';
 
 function App() {
-    const [username, setUsername] = useState('');
-    const [room, setRoom] = useState('');
-    const [joinData, setJoinData] = useState({});
+    const [joinData, setJoinData] = useState(null);
 
-    function onJoinSuccess(data) {
+    const onJoinSuccess = useCallback((data) => {
         setJoinData(data);
-        setUsername(data.userData.username);
-        setRoom(data.userData.room);
-        history.push(`/chat/rooms/${data.userData.room}`);
-    }
+        history.push(`/chat/rooms/${encodeURIComponent(data.userData.room)}`);
+    }, []);
+
+    const onLeave = useCallback(() => {
+        // Reconnecting gives a fresh socket id; the server removes the old member on disconnect.
+        socket.disconnect();
+        socket.connect();
+        setJoinData(null);
+        history.push('/join');
+    }, []);
+
     return (
-        <div className="App">
-             <Switch>
-                <Route 
-                    path="/join" 
-                    component={() => <JoinRoom onJoinSuccess={onJoinSuccess}/>}
-                />
-                <Redirect 
-                    from="/" 
-                    to="/join" 
-                    exact 
-                />
-                <Route 
-                    path="/chat/rooms/:roomNumber" 
-                    component={() => 
-                        <ChatRoom 
-                            username={username} 
-                            room={room} 
-                            joinData={joinData}
-                        /> 
-                    } 
-                />
-            </Switch>
-        </div>
+        <Switch>
+            <Route path="/join" render={() => <JoinRoom onJoinSuccess={onJoinSuccess} />} />
+            <Route
+                path="/chat/rooms/:room"
+                render={() =>
+                    joinData ? <ChatRoom joinData={joinData} onLeave={onLeave} /> : <Redirect to="/join" />
+                }
+            />
+            <Redirect to="/join" />
+        </Switch>
     );
 }
 

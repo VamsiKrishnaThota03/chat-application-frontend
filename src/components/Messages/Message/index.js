@@ -1,32 +1,18 @@
 import React from 'react';
-import {
-    MessagesContainer,
-    MessageBox,
-    MessageText,
-    SentBy
-} from './styles';
+import { Row, Bubble, Author, SystemNote } from './styles';
 
-function Message(props) {
-    const { username, message: { user, text } } = props;
-    let sentByCurrentUser = false;
-
-    if (user === username) {
-        sentByCurrentUser = true
+function Message({ username, message: { user, text } }) {
+    if (user === 'bot') {
+        return <SystemNote>{text}</SystemNote>;
     }
-    
-    const background = sentByCurrentUser ? "blue" : "dark";
-    const textPosition = sentByCurrentUser ? "end" : "start";
-    const textColor = sentByCurrentUser ? "white" : "dark";
-    const sentBy = sentByCurrentUser ? "right" : "left";
+
+    const mine = user === username;
     return (
-        <MessagesContainer textPosition={textPosition}>
-            <MessageBox background={background}>
-                <MessageText color={textColor}>{text}</MessageText>
-            </MessageBox>
-            <SentBy sentBy={sentBy}>{user}</SentBy>
-        </MessagesContainer>
-    )
+        <Row $mine={mine}>
+            {!mine && <Author>{user}</Author>}
+            <Bubble $mine={mine}>{text}</Bubble>
+        </Row>
+    );
 }
 
 export default Message;
-

@@ -1,36 +1,38 @@
 import styled from 'styled-components';
+import { colors } from '../../../theme';
 
-export const MessagesContainer = styled.div`
+export const Row = styled.div`
     display: flex;
-    padding: 0 5%;
-    margin-top: 3px;
-    justify-content: ${props => props.textPosition === "end" ? 'flex-end' : 'flex-start'};
+    flex-direction: column;
+    align-items: ${(p) => (p.$mine ? 'flex-end' : 'flex-start')};
+    margin-bottom: 10px;
 `;
 
-export const MessageBox = styled.div`
-    background: #F3F3F3;
-    border-radius: 20px;
-    padding: 15px 20px;
-    color: white;
-    display: inline-block;
-    max-width: 80%;
-    background: ${(props) => props.background === "blue" ? '#2979FF' : '#F3F3F3'};
+export const Author = styled.span`
+    font-size: 12px;
+    color: ${colors.muted};
+    margin: 0 0 2px 12px;
 `;
 
-export const MessageText = styled.p`
-    font-size: 1.1em;
+export const Bubble = styled.p`
+    margin: 0;
+    max-width: min(75%, 560px);
+    padding: 10px 14px;
+    border-radius: 16px;
+    border-bottom-right-radius: ${(p) => (p.$mine ? '4px' : '16px')};
+    border-bottom-left-radius: ${(p) => (p.$mine ? '16px' : '4px')};
+    background: ${(p) => (p.$mine ? colors.primary : '#eef0f5')};
+    color: ${(p) => (p.$mine ? '#fff' : colors.text)};
+    font-size: 15px;
+    line-height: 1.45;
+    white-space: pre-wrap;
     word-wrap: break-word;
-    color: ${(props) => props.color === "white" ? "#fff" : "#353535"};
-    margin: 0;
+    overflow-wrap: anywhere;
 `;
 
-export const SentBy = styled.p`
-    display: flex;
-    align-items: center;
-    font-family: Helvetica;
-    color: #828282;
-    letter-spacing: 0.3px;
-    padding: ${(props) => props.right ? '0 10px 0 0' : '0 0 0 10px'};
-    margin: 0;
+export const SystemNote = styled.p`
+    text-align: center;
+    color: ${colors.muted};
+    font-size: 12px;
+    margin: 8px 0 12px;
 `;
-

@@ -1,47 +1,70 @@
 import styled from 'styled-components';
-import { Button } from 'antd';
+import { colors } from '../../theme';
 
-export const ChatContainer = styled.div`
+export const Layout = styled.main`
+    height: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content:center;
-    background: #f2f2f2;
-    padding: 40px;
-    margin: 100px auto;
-    max-width: 60vw;
-    box-shadow: 5px 10px 18px #888888;
-    height: 80vh;
-`;
+    justify-content: center;
+    padding: 24px;
+    background: ${colors.page};
 
-export const StyledContainer = styled.div`
-    display: flex;
-    width: 100%;
-    flex: 1;
-    border-radius: 8px;
-    height: 60%;
-    justify-content: space-between;
-`;
-
-export const ChatBox = styled.div`
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    background: #FFFFFF;
-`;
-
-export const StyledButton = styled(Button)`
-    height: 45px;
-    background: #2979FF;
-    transition: 0.5s;
-`
-export const SendIcon = styled.div`
-    color: #fff;
-    font-size: 20px;
-    :hover {
-        color:#2979FF;
-        background: #fff;
+    @media (max-width: 640px) {
+        padding: 0;
     }
-    :focus {
-        outline: none;
+`;
+
+export const Panel = styled.div`
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    background: ${colors.surface};
+    border: 1px solid ${colors.border};
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(31, 41, 55, 0.08);
+
+    .body {
+        flex: 1;
+        display: flex;
+        min-height: 0;
+    }
+
+    .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
+
+    @media (max-width: 640px) {
+        border-radius: 0;
+        border: none;
+    }
+`;
+
+export const ChatBox = styled.section`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+`;
+
+export const Composer = styled.form`
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    border-top: 1px solid ${colors.border};
+    background: ${colors.surface};
+
+    .ant-input {
+        border-radius: 10px;
+    }
+
+    .ant-btn {
+        border-radius: 10px;
+        flex: 0 0 auto;
     }
 `;

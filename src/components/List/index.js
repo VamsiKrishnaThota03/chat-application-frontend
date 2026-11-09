@@ -1,48 +1,81 @@
 import React from 'react';
 import styled from 'styled-components';
-import { List as AntdList, Avatar} from 'antd';
+import { Avatar } from 'antd';
+import { colors, colorFor } from '../../theme';
 
-function List(props) {
+function List({ users = [], currentUser }) {
     return (
-        <StyledList>
-            <ListHeading>Active Users</ListHeading>
-            <AntdList
-                itemLayout="horizontal"
-                dataSource={props.users}
-                renderItem={user => (
-                    <AntdList.Item>
-                        <AntdList.Item.Meta
-                            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                            title={<a href="https://ant.design">{user.username}</a>}
-
-                        />
-                    </AntdList.Item>
-                )}
-            />
-        </StyledList>
-    )
+        <Sidebar aria-label="People in this room">
+            <Heading>Online · {users.length}</Heading>
+            <ul>
+                {users.map((user) => (
+                    <li key={user.id || user.username}>
+                        <Avatar size={32} style={{ background: colorFor(user.username), flex: '0 0 auto' }}>
+                            {user.username.slice(0, 1).toUpperCase()}
+                        </Avatar>
+                        <span className="name">{user.username}</span>
+                        {user.username === currentUser && <span className="you">you</span>}
+                    </li>
+                ))}
+            </ul>
+        </Sidebar>
+    );
 }
 
 export default List;
 
-const StyledList = styled(AntdList)`
-    margin-right: 10px;
-    flex: 0 0 35%;
-    padding: 20px;
-    .ant-list-item-meta-content {
-        flex-grow: 0;
-    }
-    h4 {
-        font-size: 25px;
-    }
-    a {
-        color: #097ef0;
-    }
-`
+const Sidebar = styled.aside`
+    flex: 0 0 240px;
+    border-right: 1px solid ${colors.border};
+    background: #fafbfe;
+    padding: 16px 12px;
+    overflow-y: auto;
 
-const ListHeading = styled.div`
-    color: #757591;
-    font-size: 20px;
-    font-style: oblique;
-    border-bottom: 1px solid #757591;
-`
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px;
+        border-radius: 10px;
+    }
+
+    li:hover {
+        background: ${colors.primarySoft};
+    }
+
+    .name {
+        color: ${colors.text};
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .you {
+        margin-left: auto;
+        font-size: 11px;
+        color: ${colors.primary};
+        background: ${colors.primarySoft};
+        border-radius: 999px;
+        padding: 1px 8px;
+    }
+
+    @media (max-width: 640px) {
+        display: none;
+    }
+`;
+
+const Heading = styled.h2`
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: ${colors.muted};
+    margin: 0 8px 8px;
+`;
