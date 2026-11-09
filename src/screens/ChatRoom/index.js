@@ -38,7 +38,8 @@ function ChatRoom({ joinData, onLeave }) {
         e.preventDefault();
         const text = message.trim();
         if (!text) return;
-        socket.emit('sendMessage', { message: text }, (err) => {
+        // userId is only for older backends; current servers identify the sender by connection.
+        socket.emit('sendMessage', { userId: joinData.userData.id, message: text }, (err) => {
             if (err) setError(err);
         });
         setMessage('');
