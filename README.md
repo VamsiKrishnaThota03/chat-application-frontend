@@ -68,7 +68,7 @@ src/
 ### Install and run
 
 ```bash
-git clone https://github.com/VamsiKrishnaThota03/chat-application-frontend.git
+git clone https://github.com/VamsiKrishnaThota03/realtime-chat-client.git
 cd chat-application-frontend
 npm install
 cp .env.example .env      # optional: point at another backend
